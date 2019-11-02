@@ -1,0 +1,7 @@
+
+                                      +---> Portscan
+                                      |
+MainWindow -> vector<Agent> -> Agent -+---> Dirscan
+
+
+
