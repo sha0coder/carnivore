@@ -1,3 +1,21 @@
+/*
+ *
+ * URL fixing algorithm
+
+-- init tests --
+
+[http://test.com]
+    http://test.com
+http://test.com
+    http://test.com
+aaaaaaa http://test.com
+test.com
+http://
+-- end tests --
+
+ */
+
+
 #ifndef URLFIXER_H
 #define URLFIXER_H
 

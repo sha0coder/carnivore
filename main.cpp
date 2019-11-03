@@ -1,3 +1,19 @@
+/*
+ * Carnivore v3
+ *
+ *                                +--- portscan
+ *                                |
+ * MainWindow -> agents -> agent -+--- dirscan
+ *                                |
+ *                                +--- crawler
+ *                                |
+ *                                +--- bruter
+ *
+ *
+ *
+ */
+
+
 #include "mainwindow.h"
 #include <QApplication>
 

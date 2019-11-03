@@ -1,6 +1,6 @@
 /*
- * This queue is lifo and dont allow repeated items.
- * queue by Y1sus
+ * lifo abstract queue that dont allow repeated items.
+ * Used for wordlists, url queues, and so on .
  */
 
 
@@ -17,6 +17,9 @@ using namespace std;
 template <class T>
 class Queue {
 public:
+
+
+
     Queue() {
         mutx.unlock();
     }
@@ -50,6 +53,15 @@ public:
         mutx.lock();
         qs = (T)vec.back();
         vec.pop_back();
+        mutx.unlock();
+        return qs;
+    }
+
+    T at(int pos) {
+        T qs;
+
+        mutx.lock();
+        qs = (T)vec[pos];
         mutx.unlock();
         return qs;
     }

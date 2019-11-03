@@ -1,3 +1,10 @@
+/*
+ * multithread Agent.
+ * the gracefully termination works very well.
+ *
+ */
+
+
 #include "agent.h"
 #include <QUrl>
 #include <QtCore>
@@ -71,7 +78,7 @@ void Agent::run() {
     dirscan->setWordlists(wl);
 
     for (uint i=0; i<this->urls.size() && !bStopping; i++) {
-        QUrl url(this->urls[i]);
+        QUrl url = QUrl::fromUserInput(this->urls[i]);
 
 
         qDebug() << "launching portscan " << endl;
@@ -80,7 +87,10 @@ void Agent::run() {
             break;
 
         qDebug() << "launching dirscan" << endl;
-        dirscan->start(url);
+        dirscan->addUrl(url);
+        if (bStopping)
+            break;
+        dirscan->start();
         if (bStopping)
             break;
 

@@ -14,12 +14,14 @@ public:
     Queue<QString> *params;
     Queue<QString> *folders;
     Queue<QString> *files;
+    Queue<QString> *fuzz;
 
     Wordlists() {
         load();
     }
 
     void load(void) {
+        fuzz = load_wordlist("wl/fuzz.wl");
         params = load_wordlist("wl/params.wl");
         folders = load_wordlist("wl/folders.wl");
         files = load_wordlist("wl/files.wl");

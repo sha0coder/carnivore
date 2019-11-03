@@ -13,7 +13,7 @@ public:
     void start(QString host);
 private:
     bool isRunning = true;
-    int CONNECTION_TIMEOUT = 2500;
+    int CONNECTION_TIMEOUT = 400; //2500;
 };
 
 #endif // PORTSCAN_H
