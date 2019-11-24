@@ -1,3 +1,9 @@
+/*
+ *
+ * Engine is a superclass for creating engines like portscan, dirscan, and so on.
+ *
+ */
+
 #include "engine.h"
 #include "mainwindow.h"
 

@@ -33,7 +33,7 @@ public:
     }
 
     bool contains(T item) {
-        for (int i=0; i<vec.size(); i++) {
+        for (size_t i=0; i<vec.size(); i++) {
             if (vec[i] == item)
                 return true;
         }
@@ -51,8 +51,12 @@ public:
         T qs;
 
         mutx.lock();
-        qs = (T)vec.back();
-        vec.pop_back();
+        if (vec.size() > 0) {
+            qs = (T)vec.back();
+            vec.pop_back();
+        } else {
+            qs = NULL;
+        }
         mutx.unlock();
         return qs;
     }
@@ -64,6 +68,14 @@ public:
         qs = (T)vec[pos];
         mutx.unlock();
         return qs;
+    }
+
+    size_t size() {
+        size_t sz;
+        mutx.lock();
+        sz = vec.size();
+        mutx.unlock();
+        return sz;
     }
 
 private:

@@ -1,3 +1,13 @@
+/*
+ * This object manages all the wordlists,
+ * so it should be instantiated only once.
+ *
+ * For now it's instantiated on every agent,
+ * but this will change in one isntance and
+ * pointer pass to the agents.
+ *
+ */
+
 #ifndef WORDLISTS_H
 #define WORDLISTS_H
 
@@ -5,41 +15,42 @@
 #include <QString>
 #include <fstream>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
 class Wordlists {
 
 public:
-    Queue<QString> *params;
-    Queue<QString> *folders;
-    Queue<QString> *files;
-    Queue<QString> *fuzz;
+    Queue<QString> params;
+    Queue<QString> folders;
+    Queue<QString> files;
+    Queue<QString> fuzz;
 
     Wordlists() {
         load();
     }
 
     void load(void) {
-        fuzz = load_wordlist("wl/fuzz.wl");
-        params = load_wordlist("wl/params.wl");
-        folders = load_wordlist("wl/folders.wl");
-        files = load_wordlist("wl/files.wl");
+        load_wordlist("wl/fuzz.wl", &fuzz);
+        load_wordlist("wl/params.wl", &params);
+        load_wordlist("wl/folders.wl", &folders);
+        load_wordlist("wl/files.wl", &files);
     }
 
-    Queue<QString> *load_wordlist(string file) {
+    void load_wordlist(string file, Queue<QString> *q) {
         char line[150];
-        Queue<QString> q;
         ifstream ifs(file);
-        if (!ifs)
-            return NULL;
+        if (!ifs) {
+            cout << "wordlist " << file << " not found" << endl;
+            return;
+        }
 
         while (ifs.getline(line, 149)) {
-            q.push(QString::fromUtf8(line));
+            q->push(QString::fromUtf8(line));
         }
 
         ifs.close();
-        return &q;
     }
 
 

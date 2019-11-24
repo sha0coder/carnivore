@@ -6,10 +6,7 @@
 using namespace std;
 
 Dirscan::Dirscan(Engine *parent) : Engine(parent) {
-    connect(
-     &conn, SIGNAL (finished(QNetworkReply*)),
-     this, SLOT (fileDownloaded(QNetworkReply*))
-     );
+    connect(&conn, SIGNAL (finished(QNetworkReply*)), this, SLOT (fileDownloaded(QNetworkReply*)));
 }
 
 void Dirscan::addUrl(QUrl url) {
@@ -17,8 +14,6 @@ void Dirscan::addUrl(QUrl url) {
 
     // queue url
     pending.push(url);
-
-
 
     // queue sub-urls
     QString path = url.path();
@@ -48,8 +43,8 @@ void Dirscan::addUrl(QUrl url) {
         }
 
         u2 = QUrl(url);
-        for (int i=0; i<wl->fuzz->vec.size(); i++) {
-            QString word = wl->fuzz->vec[i];
+        for (unsigned int i=0; i<wl->fuzz.size(); i++) {
+            QString word = wl->fuzz.at(i);
             auto x = baseqs.replace("##", word);
             u2.setQuery(x);
         }
@@ -58,15 +53,16 @@ void Dirscan::addUrl(QUrl url) {
     if (url.query().length()==0 && !url.path().contains(".")) { // is folder
 
         // queue folders if it's not a file
-        for (int i=0; i< wl->folders->vec.size(); i++) {
-            QString word = wl->folders->vec[i];
+        for (unsigned int i=0; i< wl->folders.size(); i++) {
+            QString word = wl->folders.at(i);
             u2 = QUrl(url);
             u2.setPath(url.path()+"/"+word);
             pending.push(u2);
         }
 
         // queue files if it's not a folder
-        for (auto word: wl->files->vec) {
+        for (unsigned int i=0; i< wl->files.size(); i++) {
+            QString word = wl->files.at(i);
             u2 = QUrl(url);
             u2.setPath(mkpath+"/"+word);
             pending.push(u2);
@@ -82,7 +78,8 @@ void Dirscan::addUrl(QUrl url) {
             surl = url.toString()+"?";
         }
 
-        for (auto word: wl->params->vec) {
+        for (unsigned int i=0; i< wl->params.size(); i++) {
+            QString word = wl->params.at(i);
             u2 = QUrl(surl+word);
             pending.push(u2);
         }
@@ -96,14 +93,16 @@ void Dirscan::addUrl(QUrl url) {
                 mkpath += "/"+folders[i];
 
             // brute folders there
-            for (auto word: wl->folders->vec) {
+            for (unsigned int i=0; i< wl->folders.size(); i++) {
+                QString word = wl->folders.at(i);
                 u2 = QUrl(url);
                 u2.setPath(mkpath+"/"+word);
                 pending.push(u2);
             }
 
             // brute files there
-            for (auto word: wl->files->vec) {
+            for (unsigned int i=0; i< wl->files.size(); i++) {
+                QString word = wl->files.at(i);
                 u2 = QUrl(url);
                 u2.setPath(mkpath+"/"+word);
                 pending.push(u2);
@@ -113,7 +112,9 @@ void Dirscan::addUrl(QUrl url) {
 }
 
 void Dirscan::start() {
-    while (isRunning) {
+    //conn = new QNetworkAccessManager();
+    isRunning = true;
+    while (isRunning && pending.size() > 0) {
         QUrl  url = pending.pop();
 
         if (processed.contains(url))
@@ -123,15 +124,14 @@ void Dirscan::start() {
         QNetworkRequest request(url);
         conn.get(request);
 
-
     }
-
+    isRunning = false;
 }
 
 void Dirscan::fileDownloaded(QNetworkReply* reply) {
     QByteArray resp = reply->readAll();
     auto lines = resp.split('\n');
-
-
-
 }
+
+
+

@@ -16,7 +16,7 @@ public:
     explicit Dirscan(Engine *parent = 0);
     void addUrl(QUrl url);
     void start(void);
-    Queue<QString> load_wordlist(QString filename);
+    //Queue<QString> load_wordlist(QString filename);
 
 signals:
 
